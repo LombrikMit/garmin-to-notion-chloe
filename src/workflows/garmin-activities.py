@@ -317,7 +317,7 @@ def main():
 
         # Check if activity already exists in Notion
         existing_activity = activity_exists(notion_client, database_id, activity_date, activity_type, activity_name)
-  print(
+        print(
             f"DEBUG: {activity_date_raw} | {activity_type} | {activity_name} | "
             f"{'déjà présente dans Notion' if existing_activity else 'nouvelle activité'}"
         )
