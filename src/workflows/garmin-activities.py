@@ -298,6 +298,7 @@ def main():
 
     # Get all activities
     activities = get_all_activities(garmin_client, garmin_configuration.activity_fetch_limit)
+    print(f"DEBUG: {len(activities)} activités récupérées depuis Garmin.")
 
     # Process all activities
     for activity in activities:
@@ -316,6 +317,10 @@ def main():
 
         # Check if activity already exists in Notion
         existing_activity = activity_exists(notion_client, database_id, activity_date, activity_type, activity_name)
+  print(
+            f"DEBUG: {activity_date_raw} | {activity_type} | {activity_name} | "
+            f"{'déjà présente dans Notion' if existing_activity else 'nouvelle activité'}"
+        )
 
         if existing_activity:
             if activity_needs_update(existing_activity, activity):
