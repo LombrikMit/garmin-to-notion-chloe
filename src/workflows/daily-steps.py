@@ -4,18 +4,22 @@ from dotenv import load_dotenv
 
 from src.helpers import get_garmin_client, get_notion_client
 
-
 def get_all_daily_steps(garmin):
     """
-    Get last x days of daily step count data from Garmin Connect.
+    Get daily step count data from Garmin Connect
+    since April 1st, 2026 (excluding today).
     """
-    startdate = date.today() - timedelta(days=1)
-    daterange = [startdate + timedelta(days=x)
-                 for x in range((date.today() - startdate).days)]  # excl. today
-    daily_steps = []
-    for d in daterange:
-        daily_steps += garmin.get_daily_steps(d.isoformat(), d.isoformat())
-    return daily_steps
+    startdate = date(2026, 4, 1)
+    enddate = date.today() - timedelta(days=1)
+
+    if startdate > enddate:
+        return []
+
+    return garmin.get_daily_steps(
+        startdate.isoformat(),
+        enddate.isoformat()
+    )
+
 
 
 def daily_steps_exist(client, database_id, activity_date):
