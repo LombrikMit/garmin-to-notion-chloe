@@ -2,14 +2,18 @@ from datetime import date, timedelta
 
 from dotenv import load_dotenv
 
-from src.helpers import get_garmin_client, get_notion_client
+from src.helpers import (
+    get_garmin_client,
+    get_notion_client,
+    notion_request_with_retry,
+    )
 
 def get_all_daily_steps(garmin):
     """
     Get daily step count data from Garmin Connect
     since April 1st, 2026 (excluding today).
     """
-    startdate = date(2026, 4, 1)
+    startdate = date(2026, 6, 11)
     enddate = date.today() - timedelta(days=1)
 
     if startdate > enddate:
@@ -26,7 +30,8 @@ def daily_steps_exist(client, database_id, activity_date):
     """
     Check if daily step count already exists in the Notion database.
     """
-    query = client.databases.query(
+    query = notion_request_with_retry(
+        client.databases.query,
         database_id=database_id,
         filter={
             "and": [
@@ -72,8 +77,8 @@ def update_daily_steps(client, existing_steps, new_steps):
         "page_id": existing_steps['id'],
         "properties": properties,
     }
-
-    client.pages.update(**update)
+    
+    notion_request_with_retry(client.pages.update, **update)
 
 
 def create_daily_steps(client, database_id, steps):
@@ -96,7 +101,7 @@ def create_daily_steps(client, database_id, steps):
         "properties": properties,
     }
 
-    client.pages.create(**page)
+    notion_request_with_retry(client.pages.create, **page)
 
 
 def main():
