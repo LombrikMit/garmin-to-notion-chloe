@@ -312,7 +312,9 @@ def main():
             .strptime(activity_date_raw, '%Y-%m-%d %H:%M:%S')  # Parse as format received from Garmin
             .replace(tzinfo=UTC)  # Set timezone to UTC, as Garmin times are in GMT/UTC. Close enough.
         )
-
+        # Ignore activities before April 1st, 2026
+        if activity_date < datetime(2026, 4, 1, tzinfo=UTC):
+            continue
         activity_name = format_entertainment(activity.get('activityName', 'Unnamed Activity'))
         activity_type, activity_subtype = format_activity_type(
             activity.get('activityType', {}).get('typeKey', 'Unknown'),
