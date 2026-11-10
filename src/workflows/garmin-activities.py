@@ -76,7 +76,7 @@ def format_activity_type(activity_type: str, activity_name: str = "") -> tuple[s
 
     # Special cases for activity names
     if activity_name and "meditation" in activity_name.lower():
-        return "Meditation", "Meditation"
+        return "Relaxation", "Meditation"
     if activity_name and "barre" in activity_name.lower():
         return "Strength", "Barre"
     if activity_name and "stretch" in activity_name.lower():
