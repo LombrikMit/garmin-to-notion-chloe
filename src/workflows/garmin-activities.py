@@ -138,18 +138,18 @@ def activity_exists(
     lookup_min_date = activity_date - timedelta(minutes=5)
     lookup_max_date = activity_date + timedelta(minutes=5)
 
-    query = notion_client.databases.query(
-        database_id=database_id,
-        filter={
-            "and": [
-                {"property": "Date", "date": {"on_or_after": lookup_min_date.isoformat()}},
-                {"property": "Date", "date": {"on_or_before": lookup_max_date.isoformat()}},
-                # Further refine the search by activity type and name
-                {"property": "Activity Type", "select": {"equals": lookup_type}},
-                {"property": "Activity Name", "title": {"equals": activity_name}}
-            ]
-        }
-    )
+    query = notion_request_with_retry(
+    notion_client.databases.query,
+    database_id=database_id,
+    filter={
+        "and":  [
+            {"property": "Date", "date": {"on_or_after": lookup_min_date.isoformat()}},
+            {"property": "Date", "date": {"on_or_before": lookup_max_date.isoformat()}},
+            {"property": "Activity Type", "select": {"equals": lookup_type}},
+            {"property": "Activity Name", "title": {"equals": activity_name}}
+                ]    
+           }
+)
     results = query['results']
     return results[0] if results else None
 
