@@ -5,7 +5,11 @@ from dotenv import load_dotenv
 from garminconnect import Garmin as GarminClient
 from notion_client import Client as NotionClient
 
-from src.helpers import get_garmin_client, get_notion_client
+from src.helpers import (
+    get_garmin_client,
+    get_notion_client,
+    notion_request_with_retry,
+)
 
 # Your local time zone, replace with the appropriate one if needed
 local_tz = pytz.timezone('America/Toronto')
