@@ -320,7 +320,13 @@ def main():
             activity.get('activityType', {}).get('typeKey', 'Unknown'),
             activity_name
         )
-            print(f"DEBUG TYPE: principal={activity_type} | secondaire={activity_subtype}")
+
+        print(f"DEBUG FORMATTER: {activity_type} | {activity_subtype} | {activity_name}")
+
+        # Check if activity already exists in Notion
+        existing_activity = activity_exists(
+            notion_client, database_id, activity_date, activity_type, activity_name
+        )
 
         # Check if activity already exists in Notion
         existing_activity = activity_exists(notion_client, database_id, activity_date, activity_type, activity_name)
