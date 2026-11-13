@@ -157,7 +157,7 @@ def activity_exists(
 def activity_needs_update(existing_activity: dict, new_activity: dict) -> bool:
     existing_props = existing_activity['properties']
 
-    activity_name = new_activity.get('activityName', '').lower()
+    activity_name = format_entertainment(new_activity.get('activityName', 'Unnamed Activity'))
     activity_type, activity_subtype = format_activity_type(
         new_activity.get('activityType', {}).get('typeKey', 'Unknown'),
         activity_name
@@ -320,6 +320,7 @@ def main():
             activity.get('activityType', {}).get('typeKey', 'Unknown'),
             activity_name
         )
+            print(f"DEBUG TYPE: principal={activity_type} | secondaire={activity_subtype}")
 
         # Check if activity already exists in Notion
         existing_activity = activity_exists(notion_client, database_id, activity_date, activity_type, activity_name)
